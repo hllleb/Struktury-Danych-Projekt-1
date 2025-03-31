@@ -8,8 +8,8 @@ namespace DataStructures
     const int DefaultCapacity = 4;
     const int CapacityMultiplier = 2;
 
-    /// \brief Implements a dynamic array
-    /// \tparam T
+    /// \brief Represents a dynamic array
+    /// \tparam T Type parameter
     template<typename T>
     class DynamicArray
     {

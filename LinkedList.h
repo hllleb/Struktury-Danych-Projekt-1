@@ -5,44 +5,61 @@
 
 namespace DataStructures
 {
+    /// \brief Represents a circular doubly-linked list
+    /// \tparam T Type parameter
     template <typename T>
     class LinkedList
     {
     public:
+        /// \brief Constructs an empty list
         LinkedList() : head(nullptr), count(0)
         {
         }
 
+        /// \brief Destructs the list freeing up the memory used to store its items
         ~LinkedList()
         {
             this->FreeMemory();
         }
 
+        /// \brief Returns the pointer to the first node of the list
+        /// \return Pointer to the first node of the list
         const LinkedListNode<T> *GetFirst() const
         {
             return this->head;
         }
 
+        /// \brief Returns the pointer to the last node of the list
+        /// \return Pointer to the last node of the list
         const LinkedListNode<T> *GetLast() const
         {
             return this->head == nullptr ? nullptr : this->head->previous;
         }
 
+        /// \brief Returns the pointer to the first node of the list
+        /// \return Pointer to the first node of the list
         LinkedListNode<T> *GetFirst()
         {
             return this->head;
         }
 
+        /// \brief Returns the pointer to the last node of the list
+        /// \return Pointer to the last node of the list
         LinkedListNode<T> *GetLast()
         {
             return this->head == nullptr ? nullptr : this->head->previous;
         }
 
+        /// \brief Returns the current number of elements in the list
+        /// \return Current number of elements
         int GetCount() const
         {
             return this->count;
         }
 
+        /// \brief Adds a new item at the given \p index position in the list
+        /// \param index A zero-based index in the array
+        /// \param value An item to add
         void AddAt(int index, T value)
         {
             if(index >= this->count)
@@ -64,6 +81,8 @@ namespace DataStructures
             AddBefore(node, value);
         }
 
+        /// \brief Removes an item at the given \p index position in the array
+        /// \param index A zero-based index in the array
         void RemoveAt(int index)
         {
             if(index >= this->count)
@@ -86,6 +105,8 @@ namespace DataStructures
             --this->count;
         }
 
+        /// \brief Adds a new \p value item to the beginning of the list
+        /// \param value An item to add
         void AddFirst(T value)
         {
             auto node = new LinkedListNode(this, value);
@@ -103,6 +124,8 @@ namespace DataStructures
             this->count++;
         }
 
+        /// \brief Adds a new \p value item to the end of the list
+        /// \param value An item to add
         void AddLast(T value)
         {
             auto node = new LinkedListNode(this, value);
@@ -119,6 +142,8 @@ namespace DataStructures
             this->count++;
         }
 
+        /// \brief Adds a new \p value item before the given \p node
+        /// \param value An item to add
         void AddBefore(LinkedListNode<T> *node, T value)
         {
             if (node == nullptr || node->GetList() != this)
@@ -131,6 +156,8 @@ namespace DataStructures
             this->count++;
         }
 
+        /// \brief Adds a new \p value item after the given \p node
+        /// \param value An item to add
         void AddAfter(LinkedListNode<T> *node, T value)
         {
             if (node == nullptr || node->GetList() != this)
@@ -143,6 +170,7 @@ namespace DataStructures
             this->count++;
         }
 
+        /// \brief Removes all the elements from the list
         void Clear()
         {
             this->FreeMemory();
@@ -150,6 +178,7 @@ namespace DataStructures
             this->head = nullptr;
         }
 
+        /// \brief Removes the first items of the list
         void RemoveFirst()
         {
             if (this->IsEmpty())
@@ -174,6 +203,7 @@ namespace DataStructures
             }
         }
 
+        /// \brief Removes the last item of the list
         void RemoveLast()
         {
             if (this->IsEmpty())
@@ -196,6 +226,9 @@ namespace DataStructures
             }
         }
 
+        /// \brief Determines whether the \p value item is present in the list
+        /// \param value An item to search for
+        /// \return \a true if the \p value item was found, \a false otherwise
         bool Contains(T value) const
         {
             LinkedListNode<T> *node = this->head;
@@ -212,11 +245,15 @@ namespace DataStructures
             return false;
         }
 
+        /// \brief Determines whether the list is empty
+        /// \return \a true if the list has no elements, \a false otherwise
         bool IsEmpty() const
         {
             return this->head == nullptr;
         }
 
+        /// \brief Creates a dynamic array containing all of the items from the list
+        /// \return A copy of the created array
         DynamicArray<T> ToArray() const
         {
             int capacity = 4;

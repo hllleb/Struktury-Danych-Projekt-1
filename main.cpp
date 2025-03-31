@@ -5,6 +5,9 @@
 
 using namespace DataStructures;
 
+/// \brief Displays the items of the \p array in console
+/// \tparam T Type parameter
+/// \param array A dynamic array to display
 template <typename T>
 void Display(const DynamicArray<T>& array)
 {
@@ -16,6 +19,9 @@ void Display(const DynamicArray<T>& array)
     std::cout << std::endl;
 }
 
+/// \brief Displays the items of the \p list in console
+/// \tparam T Type parameter
+/// \param array A linked list to display
 template <typename T>
 void Display(const LinkedList<T>& list)
 {
