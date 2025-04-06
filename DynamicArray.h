@@ -259,11 +259,11 @@ namespace DataStructures
 
         void IncreaseCapacity()
         {
-            this->capacity *= CapacityMultiplier;
-            T *newItems = new T[this->capacity];
-            Copy(this->items, 0, newItems, 0, this->length);
-            delete[] this->items;
-            this->items = newItems;
+            this->capacity *= CapacityMultiplier; // Mnożymy pojemność przez mnożnik (równy 2)
+            T *newItems = new T[this->capacity]; // Allokujemy pamięć dla nowej tablicy wewnętrznej
+            Copy(this->items, 0, newItems, 0, this->length); // Kopiujemy elementy starej tablicy do nowej
+            delete[] this->items; // Zwalniamy pamięć używają przez starą tablicę
+            this->items = newItems; // Przepisujemy wskaźnik nowej tablicy do pola obiektu
         }
 
         void CheckIndex(int index) const

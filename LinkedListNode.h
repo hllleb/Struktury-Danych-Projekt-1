@@ -16,8 +16,6 @@ namespace DataStructures
     class LinkedListNode
     {
     public:
-        static int NodesCount;
-
         friend class LinkedList<T>;
 
         /// \brief Constructs a linked list node containing the given \p value
@@ -31,13 +29,11 @@ namespace DataStructures
         /// \param value A value for the new node
         LinkedListNode(LinkedList<T> *list, T value) : list(list), item(value), previous(nullptr), next(nullptr)
         {
-            std::cout << "Created " << this << " (Total count = " << ++LinkedListNode::NodesCount << ")" << std::endl;
         }
 
         /// \brief Destructs the node
         ~LinkedListNode()
         {
-            std::cout << "Deleted " << this << " (Total count = " << --LinkedListNode::NodesCount << ")" << std::endl;
         }
 
         /// \brief Returns the value of the node
@@ -102,9 +98,6 @@ namespace DataStructures
         LinkedListNode<T> *next;
         LinkedList<T> *list;
     };
-
-    template <typename T>
-    int LinkedListNode<T>::NodesCount = 0;
 }
 
 #endif //PROJEKT1_LINKEDLISTNODE_H
