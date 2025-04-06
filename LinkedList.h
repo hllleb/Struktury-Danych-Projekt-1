@@ -245,6 +245,82 @@ namespace DataStructures
             return false;
         }
 
+        /// \brief Searches the list for the first present \p value item
+        /// \param value An item to search for
+        /// \return Node containing \p value item, nullptr otherwise
+        LinkedListNode<T>* Find(T value)
+        {
+            LinkedListNode<T> *node = this->head;
+            for (int i = 0; i < this->count; i++)
+            {
+                if (node->item == value)
+                {
+                    return node;
+                }
+
+                node = node->next;
+            }
+
+            return nullptr;
+        }
+
+        /// \brief Searches the list for the first present \p value item
+        /// \param value An item to search for
+        /// \return Node containing \p value item, nullptr otherwise
+        const LinkedListNode<T>* Find(T value) const
+        {
+            LinkedListNode<T> *node = this->head;
+            for (int i = 0; i < this->count; i++)
+            {
+                if (node->item == value)
+                {
+                    return node;
+                }
+
+                node = node->next;
+            }
+
+            return nullptr;
+        }
+
+        /// \brief Searches the list for the last present \p value item
+        /// \param value An item to search for
+        /// \return Node containing \p value item, nullptr otherwise
+        LinkedListNode<T>* FindLast(T value)
+        {
+            LinkedListNode<T> *node = this->GetLast();
+            for (int i = 0; i < this->count; i++)
+            {
+                if (node->item == value)
+                {
+                    return node;
+                }
+
+                node = node->previous;
+            }
+
+            return nullptr;
+        }
+
+        /// \brief Searches the list for the last present \p value item
+        /// \param value An item to search for
+        /// \return Node containing \p value item, nullptr otherwise
+        const LinkedListNode<T>* FindLast(T value) const
+        {
+            LinkedListNode<T> *node = this->GetLast();
+            for (int i = 0; i < this->count; i++)
+            {
+                if (node->item == value)
+                {
+                    return node;
+                }
+
+                node = node->previous;
+            }
+
+            return nullptr;
+        }
+
         /// \brief Determines whether the list is empty
         /// \return \a true if the list has no elements, \a false otherwise
         bool IsEmpty() const
