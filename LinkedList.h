@@ -7,13 +7,29 @@ namespace DataStructures
 {
     /// \brief Represents a circular doubly-linked list
     /// \tparam T Type parameter
-    template <typename T>
+    template<typename T>
     class LinkedList
     {
     public:
         /// \brief Constructs an empty list
         LinkedList() : head(nullptr), count(0)
         {
+        }
+
+        /// \brief Copy constructor
+        /// \param list List to copy from
+        LinkedList(const LinkedList &list) : head(nullptr), count(0)
+        {
+            LinkedListNode<T> *current = list.head;
+            if (current != nullptr)
+            {
+                do
+                {
+                    this->AddLast(current->GetValue());
+                    current = current->GetNext();
+                }
+                while (current != list.head);
+            }
         }
 
         /// \brief Destructs the list freeing up the memory used to store its items
@@ -62,18 +78,18 @@ namespace DataStructures
         /// \param value An item to add
         void AddAt(int index, T value)
         {
-            if(index >= this->count)
+            if (index >= this->count)
             {
                 throw std::invalid_argument("Index is outside the list");
             }
 
-            if(index == 0)
+            if (index == 0)
             {
                 this->AddFirst(value);
             }
 
             auto node = this->head;
-            for(int i = 0; i < index; i++)
+            for (int i = 0; i < index; i++)
             {
                 node = node->next;
             }
@@ -85,18 +101,18 @@ namespace DataStructures
         /// \param index A zero-based index in the array
         void RemoveAt(int index)
         {
-            if(index >= this->count)
+            if (index >= this->count)
             {
                 throw std::invalid_argument("Index is outside the list");
             }
 
-            if(index == 0)
+            if (index == 0)
             {
-                this->RemoveFirst();
+                return this->RemoveFirst();
             }
 
             auto node = this->head;
-            for(int i = 0; i < index; i++)
+            for (int i = 0; i < index; i++)
             {
                 node = node->next;
             }
@@ -248,7 +264,7 @@ namespace DataStructures
         /// \brief Searches the list for the first present \p value item
         /// \param value An item to search for
         /// \return Node containing \p value item, nullptr otherwise
-        LinkedListNode<T>* Find(T value)
+        LinkedListNode<T> *Find(T value)
         {
             LinkedListNode<T> *node = this->head;
             for (int i = 0; i < this->count; i++)
@@ -267,7 +283,7 @@ namespace DataStructures
         /// \brief Searches the list for the first present \p value item
         /// \param value An item to search for
         /// \return Node containing \p value item, nullptr otherwise
-        const LinkedListNode<T>* Find(T value) const
+        const LinkedListNode<T> *Find(T value) const
         {
             LinkedListNode<T> *node = this->head;
             for (int i = 0; i < this->count; i++)
@@ -286,7 +302,7 @@ namespace DataStructures
         /// \brief Searches the list for the last present \p value item
         /// \param value An item to search for
         /// \return Node containing \p value item, nullptr otherwise
-        LinkedListNode<T>* FindLast(T value)
+        LinkedListNode<T> *FindLast(T value)
         {
             LinkedListNode<T> *node = this->GetLast();
             for (int i = 0; i < this->count; i++)
@@ -305,7 +321,7 @@ namespace DataStructures
         /// \brief Searches the list for the last present \p value item
         /// \param value An item to search for
         /// \return Node containing \p value item, nullptr otherwise
-        const LinkedListNode<T>* FindLast(T value) const
+        const LinkedListNode<T> *FindLast(T value) const
         {
             LinkedListNode<T> *node = this->GetLast();
             for (int i = 0; i < this->count; i++)
