@@ -1,164 +1,190 @@
-#include <iostream>
 #include "DynamicArray.h"
 #include "LinkedList.h"
-#include <string>
+#include <iostream>
+#include <chrono>
+#include <vector>
+#include <fstream>
 
+using namespace std;
 using namespace DataStructures;
 
-/// \brief Displays the items of the \p array in console
-/// \tparam T Type parameter
-/// \param array A dynamic array to display
-template <typename T>
-void Display(const DynamicArray<T>& array)
+void SaveResults(const string& filename, const vector<pair<string, chrono::duration<double>>>& results)
 {
-    for(int i = 0; i < array.GetLength(); i++)
+    ofstream file(filename);
+    file << "Operation,Time(seconds)" << endl;
+    for (const auto& result : results)
     {
-        std::cout << array[i] << ' ';
+        file << result.first << "," << result.second.count() << endl;
     }
-
-    std::cout << std::endl;
+    file.close();
 }
 
-/// \brief Displays the items of the \p list in console
-/// \tparam T Type parameter
-/// \param array A linked list to display
-template <typename T>
-void Display(const LinkedList<T>& list)
+template<typename T>
+void TestDynamicArray(int numElements, vector<pair<string, chrono::duration<double>>>& results)
 {
-    auto node = list.GetFirst();
-    while(node != nullptr)
-    {
-        std::cout << node->GetValue() << ' ';
-        node = node->GetNext();
-        if(node == list.GetFirst())
-        {
-            node = nullptr;
-        }
-    }
+    DynamicArray<T> array;
 
-    std::cout << std::endl;
+    // Test adding elements to the end
+    auto start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        array.Add(i);
+    }
+    auto end = chrono::high_resolution_clock::now();
+    results.push_back({"Adding to the end (" + to_string(numElements) + " elements)", end - start});
+
+    DynamicArray<T> array2 = array;
+    DynamicArray<T> array3 = array;
+    DynamicArray<T> array4 = array;
+    DynamicArray<T> array5 = array;
+
+    // Test adding elements to the beginning
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        array.Insert(0, i);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Adding to the beginning (" + to_string(numElements) + " elements)", end - start});
+
+    // Test adding elements to a given index
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        array2.Insert(array2.GetLength() / 2, i);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Adding to a given index (" + to_string(numElements) + " elements)", end - start});
+
+    // Test removing elements from the end
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        array3.RemoveAt(array3.GetLength() - 1);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Removing from the end (" + to_string(numElements) + " elements)", end - start});
+
+    // Test removing elements from the beginning
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        array4.RemoveAt(0);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Removing from the beginning (" + to_string(numElements) + " elements)", end - start});
+
+    // Test removing elements from a given index
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        array5.RemoveAt(array5.GetLength() / 2);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Removing from a given index (" + to_string(numElements) + " elements)", end - start});
+
+    // Test finding elements
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        array2.IndexOf(i);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Finding elements (" + to_string(numElements) + " elements)", end - start});
+}
+
+template<typename T>
+void TestLinkedList(int numElements, vector<pair<string, chrono::duration<double>>>& results)
+{
+    LinkedList<T> list;
+
+    // Test adding elements to the end
+    auto start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        list.AddLast(i);
+    }
+    auto end = chrono::high_resolution_clock::now();
+    results.push_back({"Adding to the end (" + to_string(numElements) + " elements)", end - start});
+
+    LinkedList<T> list2 = list;
+    LinkedList<T> list3 = list;
+    LinkedList<T> list4 = list;
+
+    // Test adding elements to the beginning
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        list.AddFirst(i);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Adding to the beginning (" + to_string(numElements) + " elements)", end - start});
+
+    // Test adding elements to a given index
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        list2.AddAt(list2.GetCount() / 2, i);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Adding to a given index (" + to_string(numElements) + " elements)", end - start});
+
+    // Test removing elements from the end
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        list2.RemoveLast();
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Removing from the end (" + to_string(numElements) + " elements)", end - start});
+
+    // Test removing elements from the beginning
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        list3.RemoveFirst();
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Removing from the beginning (" + to_string(numElements) + " elements)", end - start});
+
+    // Test removing elements from a given index
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        list4.RemoveAt(list4.GetCount() / 2);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Removing from a given index (" + to_string(numElements) + " elements)", end - start});
+
+    // Test finding elements
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < numElements; ++i)
+    {
+        list2.Find(i);
+    }
+    end = chrono::high_resolution_clock::now();
+    results.push_back({"Finding elements (" + to_string(numElements) + " elements)", end - start});
 }
 
 int main()
 {
-    DynamicArray<int> array;
+    vector<int> testSizes = { 1, 10, 20, 40, 80, 100, 200, 400, 800, 1000, 1600, 3200, 6400, 10000, 12800, 25600, 51200, 102400 };
+    vector<pair<string, chrono::duration<double>>> dynamicArrayResults;
+    vector<pair<string, chrono::duration<double>>> linkedListResults;
 
+    // Test DynamicArray
+    for (int size : testSizes)
+    {
+        TestDynamicArray<int>(size, dynamicArrayResults);
+    }
+    SaveResults("DynamicArrayResults.csv", dynamicArrayResults);
 
-
-    array.Add(5);
-    array.Add(-212);
-    array.Add(51);
-    array.Add(0);
-    array.Add(10);
-    std::cout << "Array: \t";
-    Display(array);
-    array.Insert(3, -100);
-    std::cout << "Insert(3, -100): \t";
-    Display(array);
-    array.Insert(5, 500);
-    std::cout << "Insert(5, 500): \t";
-    Display(array);
-    array.Insert(0, -999);
-    std::cout << "Insert(0, -999): \t";
-    Display(array);
-
-
-    array.RemoveAt(3);
-    Display(array);
-    array.RemoveAt(0);
-    Display(array);
-    array.RemoveLast();
-    Display(array);
-    array.Add(10000);
-    Display(array);
-
-
-    DynamicArray array2 = { 1, 2, 3, 4, 5 };
-    Display(array2);
-    array2 = array;
-    array[0] = 4238952;
-    Display(array);
-    array2 = array2;
-    Display(array2);
-
-    array = { 5, -4, 0, 2, 1 };
-    Display(array);
-
-    DynamicArray stringArray = { "Hello", "my", "World", "!", "!", "and", "you" };
-    Display(stringArray);
-    stringArray.RemoveAt(4);
-    stringArray.RemoveAt(1);
-    stringArray.Add("!");
-    stringArray.RemoveAt(2);
-    Display(stringArray);
-
-
-
-
-
-
-
-    LinkedList<int> list;
-    list.AddFirst(1);
-    list.AddFirst(2);
-    list.AddFirst(3);
-    list.AddFirst(4);
-    list.AddFirst(5);
-    list.AddFirst(6);
-
-    Display(list);
-
-    list.AddLast(7);
-    list.AddLast(8);
-    list.AddLast(9);
-    list.AddLast(10);
-    list.AddLast(11);
-
-    auto node = list.GetFirst();
-    node = node->GetNext()->GetNext()->GetNext();
-    list.AddBefore(node, 100);
-    std::cout << "Item: " << node->GetValue() << std::endl;
-    list.AddAfter(node, -999);
-    Display(list);
-
-
-    DynamicArray<int> newarr = array;
-    Display(newarr);
-
-
-    auto listArray = list.ToArray();
-    listArray.Insert(3, 555);
-    listArray.RemoveAt(5);
-    Display(listArray);
-    std::cout << "===================================" << std::endl;
-    Display(list);
-    std::cout << "Count = " << list.GetCount() << std::endl;
-    list.AddAt(3, 4732);
-    Display(list);
-    std::cout << "Count = " << list.GetCount() << std::endl;
-    list.RemoveAt(1);
-    Display(list);
-    std::cout << "Count = " << list.GetCount() << std::endl;
-
-    LinkedList<const char*> stringList;
-    stringList.AddLast("time");
-    Display(stringList);
-    stringList.AddLast("the");
-    Display(stringList);
-    stringList.AddLast("apple");
-    Display(stringList);
-    stringList.AddFirst("new");
-    Display(stringList);
-    stringList.AddAt(1, "hope");
-    Display(stringList);
-    stringList.AddAt(0, "name");
-    Display(stringList);
-    stringList.RemoveAt(3);
-    Display(stringList);
-    stringList.RemoveLast();
-    Display(stringList);
-    stringList.RemoveFirst();
-    Display(stringList);
+    // Test LinkedList
+    for (int size : testSizes)
+    {
+        TestLinkedList<int>(size, linkedListResults);
+    }
+    SaveResults("LinkedListResults.csv", linkedListResults);
 
     return 0;
 }
