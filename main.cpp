@@ -177,14 +177,42 @@ int main()
     {
         TestDynamicArray<int>(size, dynamicArrayResults);
     }
-    SaveResults("DynamicArrayResults.csv", dynamicArrayResults);
+
+    auto comp = [](const pair<string, chrono::duration<double>>& a, const pair<string, chrono::duration<double>>& b) {
+        auto aLeftIndex = a.first.find('(');
+        auto aRightIndex = a.first.find(')');
+        auto bLeftIndex = b.first.find('(');
+        auto bRightIndex = b.first.find(')');
+
+        auto aCountStr = (a.first.substr(aLeftIndex + 1, aRightIndex - aLeftIndex - 10));
+        auto bCountStr = (b.first.substr(bLeftIndex + 1, bRightIndex - bLeftIndex - 10));
+        auto aCount = stoi(aCountStr);
+        auto bCount = stoi(bCountStr);
+
+        auto aOperation = a.first.substr(0, aLeftIndex - 1);
+        auto bOperation = b.first.substr(0, bLeftIndex - 1);
+
+        if(aOperation == bOperation)
+        {
+            return aCount < bCount;
+        }
+
+        return aOperation < bOperation;
+    };
+
+    sort(dynamicArrayResults.begin(), dynamicArrayResults.end(), comp);
+    SaveResults("DynamicArrayResults6.csv", dynamicArrayResults);
 
     // Test LinkedList
     for (int size : testSizes)
     {
         TestLinkedList<int>(size, linkedListResults);
     }
-    SaveResults("LinkedListResults.csv", linkedListResults);
+
+    sort(linkedListResults.begin(), linkedListResults.end(), comp);
+    SaveResults("LinkedListResults6.csv", linkedListResults);
+
+
 
     return 0;
 }
