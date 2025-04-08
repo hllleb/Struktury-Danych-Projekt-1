@@ -35,7 +35,7 @@ namespace DataStructures
         /// \brief Destructs the list freeing up the memory used to store its items
         ~LinkedList()
         {
-            this->FreeMemory();
+            this->Clear();
         }
 
         /// \brief Returns the pointer to the first node of the list
@@ -189,9 +189,23 @@ namespace DataStructures
         /// \brief Removes all the elements from the list
         void Clear()
         {
-            this->FreeMemory();
-            this->count = 0;
+            if (this->IsEmpty())
+            {
+                return;
+            }
+
+            LinkedListNode<T>* current = this->head;
+            LinkedListNode<T>* nextNode = nullptr;
+            this->head->previous->next = nullptr;
+            while (current != nullptr)
+            {
+                nextNode = current->next;
+                delete current;
+                current = nextNode;
+            }
+
             this->head = nullptr;
+            this->count = 0;
         }
 
         /// \brief Removes the first items of the list
@@ -368,23 +382,6 @@ namespace DataStructures
     private:
         LinkedListNode<T> *head;
         int count;
-
-        void FreeMemory()
-        {
-            if (this->IsEmpty())
-            {
-                return;
-            }
-
-            auto node = this->head;
-            auto nextNode = node->next;
-            for (int i = 0; i < this->count; i++)
-            {
-                delete node;
-                node = nextNode;
-                nextNode = node->next;
-            }
-        }
 
         static void AddBefore(LinkedListNode<T> *node, LinkedListNode<T> *newNode)
         {
